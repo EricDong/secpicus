@@ -30,7 +30,7 @@ async def get_manager(request: Request, id: str):
 
     return templates.TemplateResponse("manager.html", {
         "request": request, 
-        "base_info": manager_info['base_info'],
+        "base_info": manager_info['basic_info'],
         "total_value_img": manager_info["total_value_trend"],
         "top_10_img": manager_info["top10_issuers_of_latest_period"],
         "gics_img": manager_info["value_sum_by_gics"],
