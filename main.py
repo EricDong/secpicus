@@ -20,6 +20,27 @@ info_map = load_all_info()
 def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
+@app.get("/{id}.html", response_class=HTMLResponse)
+async def get_manager(request: Request, id: str):
+
+    manager_info = get_manager_by_id(id=id, info_map=info_map)
+    if manager_info is None:
+        raise HTTPException(status_code=404, detail="Manager not found")
+
+    return templates.TemplateResponse("manager.html", {
+        "request": request, 
+        "base_info": manager_info['base_info'],
+        "total_value_img": manager_info["total_value_trend"],
+        "top_10_img": manager_info["top10_issuers_of_latest_period"],
+        "gics_img": manager_info["value_sum_by_gics"],
+        "percent_img": manager_info["topn_issuers_value_sum_percent"],
+        "top5_issuer_img": manager_info["top5_issuers_of_all_periods"],
+
+        })
+
+
+
 @app.get("/manager", response_class=HTMLResponse)
 async def get_manager(request: Request, manager_name: str):
     is_dict = isinstance(info_map, dict)
@@ -39,27 +60,6 @@ async def get_manager(request: Request, manager_name: str):
         "percent_img": manager_info["percent_img"],
         "top5_issuer_img": manager_info["top5_issuer_img"],
         "top5_issuer_table": manager_info["top5_issuer_table"], 
-        })
-
-
-@app.get("/{id}.html", response_class=HTMLResponse)
-async def get_manager(request: Request, id: str):
-
-    manager_info = get_manager_by_id(id=id, info_map=info_map)
-    if manager_info is None:
-        raise HTTPException(status_code=404, detail="Manager not found")
-
-    return templates.TemplateResponse("manager.html", {
-        "request": request, 
-        "base_info": manager_info['base_info'],
-        "total_value_img": manager_info["total_value_img"],
-        "top_10_img": manager_info["top_10_img"],
-        # "top_10_table": manager_info["top_10_table"],
-        "gics_img": manager_info["gics_img"],
-        # "gics_table": manager_info["gics_table"],
-        "percent_img": manager_info["percent_img"],
-        "top5_issuer_img": manager_info["top5_issuer_img"],
-        # "top5_issuer_table": manager_info["top5_issuer_table"], 
         })
 
 
