@@ -2,7 +2,7 @@ import json
 
 
 def load_all_info():
-    with open("static/manager.json", "r") as f:
+    with open("static/managers537.json", "r") as f:
         return json.load(f)
 
 def get_manager_info(manager_name: str, info_map: dict):
